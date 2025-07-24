@@ -3,14 +3,9 @@ const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
 require('dotenv').config();
-const upload = require('./middleware/upload'); 
+
 const productRoute = require("./Routes/Productroute.js");
 const userRoutes = require("./Routes/Userroute.js");
-
-
-app.post('/upload', upload.single('image'), (req, res) => {
-  res.send('File uploaded');
-});
 
 app.use(cors());
 app.use(express.json());
