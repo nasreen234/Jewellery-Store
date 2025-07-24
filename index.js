@@ -1,0 +1,35 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const app = express();
+const cors = require('cors');
+require('dotenv').config();
+const upload = require('./middleware/upload'); 
+const productRoute = require("./Routes/Productroute.js");
+const userRoutes = require("./Routes/Userroute.js");
+
+
+app.post('/upload', upload.single('image'), (req, res) => {
+  res.send('File uploaded');
+});
+
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+//routes
+app.use("/api/products", productRoute); 
+app.use("/api/users", userRoutes);
+
+app.get('/', (req, res) => {
+  res.send('Jewellery API running...');
+});
+
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    app.listen(process.env.PORT, () => {
+      console.log(`Server running on port ${process.env.PORT}`);
+    });
+  })
+  .catch(err => console.error('MongoDB connection error:', err));
