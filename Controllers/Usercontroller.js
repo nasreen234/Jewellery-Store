@@ -52,6 +52,52 @@ const getAllUsers = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
+// @desc    Get current user profile
+const getUserProfile = async (req, res) => {
+  const user = await User.findById(req.user.id).select('-password');
+  if (!user) return res.status(404).json({ message: 'User not found' });
+  res.status(200).json(user);
+};
 
-module.exports = { registerUser, loginUser, getAllUsers };
+// @desc    Update current user profile
+// Update current logged-in user
+// Update logged-in user's profile
+const updateUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+       user.mobile = req.body.mobile || user.mobile;
+      user.address = req.body.address || user.address;
+
+
+      // Update password only if provided
+      if (req.body.password) {
+        user.password = req.body.password;
+      }
+
+      const updatedUser = await user.save();
+
+      res.json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+         mobile: updatedUser.mobile,
+        address: updatedUser.address,
+        isAdmin: updatedUser.isAdmin,
+        token: generateToken(updatedUser._id),
+      });
+    } else {
+      res.status(404).json({ message: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error in updateUserProfile:', error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+
+module.exports = { registerUser, loginUser, getAllUsers,getUserProfile,updateUserProfile};
 
