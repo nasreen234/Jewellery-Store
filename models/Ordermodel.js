@@ -9,14 +9,15 @@ const orderSchema = new mongoose.Schema(
     },
     orderItems: [
       {
+        
+        name: String,
+        qty: Number,
+        price: Number,
+        image: String,
         product: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Product',
-          required: true,
         },
-        quantity: { type: Number, required: true },
-        price: { type: Number, required: true },
-        size: { type: String }, // optional
       },
     ],
     shippingAddress: {
@@ -24,8 +25,9 @@ const orderSchema = new mongoose.Schema(
       phone: String,
       address: String,
       city: String,
-      pincode: String,
+      pincode: Number,
     },
+    paymentMethod: { type: String, required: true },
     totalPrice: { type: Number, required: true },
     isPaid: { type: Boolean, default: false },
     paidAt: Date,
