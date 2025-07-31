@@ -7,6 +7,7 @@ require('dotenv').config();
 const productRoute = require("./Routes/Productroute.js");
 const userRoutes = require("./Routes/Userroute.js");
 const orderRoute = require("./Routes/Orderroute.js");
+const cartRoutes = require('./Routes/Cartroute.js');
 
 app.use(cors());
 app.use(express.json());
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/products", productRoute); 
 app.use("/api/users", userRoutes);
 app.use("/api/orders",orderRoute);
+app.use('/api/cart', cartRoutes);
 
 app.get('/', (req, res) => {
   res.send('Jewellery API running...');
