@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 // Generate token
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '1m' });
 };
 
 // Register Admin/User
@@ -11,7 +11,7 @@ const registerUser = async (req, res) => {
   const { name, email, password, isAdmin } = req.body;
 
   const userExists = await User.findOne({ email });
-  if (userExists) return res.status(400).json({ message: "User already exists" });
+  if (userExists) return res.status(400).json({ message: "User already exists" });  
 
   const user = await User.create({ name, email, password, isAdmin });
 
@@ -59,44 +59,44 @@ const getUserProfile = async (req, res) => {
   res.status(200).json(user);
 };
 
-// @desc    Update current user profile
+
 // Update current logged-in user
-// Update logged-in user's profile
-const updateUserProfile = async (req, res) => {
-  try {
-    const user = await User.findById(req.user._id);
 
-    if (user) {
-      user.name = req.body.name || user.name;
-      user.email = req.body.email || user.email;
-       user.mobile = req.body.mobile || user.mobile;
-      user.address = req.body.address || user.address;
+  const updateUserProfile = async (req, res) => {
+    try {
+      const user = await User.findById(req.user._id);
+
+      if (user) {
+        user.name = req.body.name || user.name;
+        user.email = req.body.email || user.email;
+        user.mobile = req.body.mobile || user.mobile;
+        user.address = req.body.address || user.address;
 
 
-      // Update password only if provided
-      if (req.body.password) {
-        user.password = req.body.password;
+        // Update password only if provided
+        if (req.body.password) {
+          user.password = req.body.password;
+        }
+
+        const updatedUser = await user.save();
+
+        res.json({
+          _id: updatedUser._id,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          mobile: updatedUser.mobile,
+          address: updatedUser.address,
+          isAdmin: updatedUser.isAdmin,
+          token: generateToken(updatedUser._id),
+        });
+      } else {
+        res.status(404).json({ message: 'User not found' });
       }
-
-      const updatedUser = await user.save();
-
-      res.json({
-        _id: updatedUser._id,
-        name: updatedUser.name,
-        email: updatedUser.email,
-         mobile: updatedUser.mobile,
-        address: updatedUser.address,
-        isAdmin: updatedUser.isAdmin,
-        token: generateToken(updatedUser._id),
-      });
-    } else {
-      res.status(404).json({ message: 'User not found' });
+    } catch (error) {
+      console.error('Error in updateUserProfile:', error);
+      res.status(500).json({ message: 'Server Error' });
     }
-  } catch (error) {
-    console.error('Error in updateUserProfile:', error);
-    res.status(500).json({ message: 'Server Error' });
-  }
-};
+  };
 
 
 module.exports = { registerUser, loginUser, getAllUsers,getUserProfile,updateUserProfile};

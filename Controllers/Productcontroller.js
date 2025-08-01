@@ -51,43 +51,43 @@ const createProduct = async (req, res) => {
 };
 
 // ✅ Update a product with optional image replacement
-const updateProduct = async (req, res) => {
-  try {
-    const { id } = req.params;
+    const updateProduct = async (req, res) => {
+      try {
+        const { id } = req.params;
 
-    // 1. Find the existing product
-    const product = await Product.findById(id);
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
+        // 1. Find the existing product
+        const product = await Product.findById(id);
+        if (!product) {
+          return res.status(404).json({ message: "Product not found" });
+        }
 
-    // 2. Build updated data from body
-    const updatedData = { ...req.body };
+        // 2. Build updated data from body
+        const updatedData = { ...req.body };
 
-    // 3. If new image is uploaded
-    if (req.file) {
-      // a. Delete old image from Cloudinary
-      if (product.imagePublicId) {
-        await cloudinary.uploader.destroy(product.imagePublicId);
+        // 3. If new image is uploaded
+        if (req.file) {
+          // a. Delete old image from Cloudinary
+          if (product.imagePublicId) {
+            await cloudinary.uploader.destroy(product.imagePublicId);
+          }
+
+          // b. Set new image data
+          updatedData.image = req.file.path;
+          updatedData.imagePublicId = req.file.filename;
+        }
+
+        // 4. Update product
+        const updatedProduct = await Product.findByIdAndUpdate(
+          id,
+          { $set: updatedData },
+          { new: true }
+        );
+
+        res.status(200).json(updatedProduct);
+      } catch (error) {
+        res.status(500).json({ message: error.message });
       }
-
-      // b. Set new image data
-      updatedData.image = req.file.path;
-      updatedData.imagePublicId = req.file.filename;
-    }
-
-    // 4. Update product
-    const updatedProduct = await Product.findByIdAndUpdate(
-      id,
-      { $set: updatedData },
-      { new: true }
-    );
-
-    res.status(200).json(updatedProduct);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+    };
 
 // ✅ Delete a product and its image
 const deleteProduct = async (req, res) => {
