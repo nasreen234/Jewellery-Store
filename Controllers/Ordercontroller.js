@@ -4,10 +4,13 @@ const Order = require('../models/Ordermodel.js');
   try {
      console.log('REQ USER:', req.user); // 👈 debug this
     console.log('BODY:', req.body);
+ console.log('Received shippingAddress:', req.body.shippingAddress);
     const { orderItems, shippingAddress, totalPrice, paymentMethod } = req.body;
+     
   if (!orderItems || orderItems.length === 0) {
       return res.status(400).json({ message: 'No order items provided' });
     }
+
     const order = await Order.create({
       user: req.user._id,
       orderItems,
@@ -22,10 +25,11 @@ const Order = require('../models/Ordermodel.js');
   }
 };
 
- const getMyOrders = async (req, res) => {
-  const orders = await Order.find({ user: req.user._id }).populate('orderItems.product');
-  res.json(orders);
-};
+
+  const getMyOrders = async (req, res) => {
+    const orders = await Order.find({ user: req.user._id }).populate('orderItems.product');
+    res.json(orders);
+  };
 
  const getAllOrders = async (req, res) => {
   const orders = await Order.find().populate('user', 'name email').populate('orderItems.product');
