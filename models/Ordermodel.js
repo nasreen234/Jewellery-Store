@@ -22,10 +22,10 @@ const orderSchema = new mongoose.Schema(
     ],
     shippingAddress: {
       name: String,
-      phone: String,
+      mobilenumber: String,
       address: String,
       city: String,
-      pincode: String,
+      postalCode:String,
     },
     paymentMethod: { type: String, required: true },
     totalPrice: { type: Number, required: true },
