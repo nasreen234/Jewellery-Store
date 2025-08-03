@@ -53,6 +53,7 @@ const Order = require('../models/Ordermodel.js');
 };
 
 const deleteOrder = async (req, res) => {
+   console.log('➡️ DELETE /api/orders/:id hit');
   try {
     const order = await Order.findById(req.params.id);
     if (!order) return res.status(404).json({ message: 'Order not found' });
@@ -60,6 +61,7 @@ const deleteOrder = async (req, res) => {
     await order.remove();
     res.json({ message: 'Order deleted successfully' });
   } catch (error) {
+    console.error('❌ Delete Order Error:', error); 
     res.status(500).json({ message: 'Error deleting order' });
   }
 };
