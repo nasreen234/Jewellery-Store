@@ -98,6 +98,26 @@ const getUserProfile = async (req, res) => {
     }
   };
 
+// @desc    Delete a user by ID (Admin only)
+const deleteUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
 
-module.exports = { registerUser, loginUser, getAllUsers,getUserProfile,updateUserProfile};
+    if (user) {
+      if (user.isAdmin) {
+        return res.status(400).json({ message: "Cannot delete admin user" });
+      }
+
+      await user.remove();
+      res.status(200).json({ message: 'User removed successfully' });
+    } else {
+      res.status(404).json({ message: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error in deleteUser:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+module.exports = { registerUser, loginUser, getAllUsers,getUserProfile,updateUserProfile,deleteUser};
 

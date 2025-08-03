@@ -1,6 +1,6 @@
 const express = require('express');
 const { registerUser, loginUser,getAllUsers,getUserProfile,
-  updateUserProfile} = require('../Controllers/Usercontroller');
+  updateUserProfile, deleteUser,} = require('../Controllers/Usercontroller');
 const router = express.Router();
 const { protect, admin } = require('../middleware/authMiddleware');
 
@@ -9,5 +9,6 @@ router.post('/login', loginUser);
 router.get('/', protect, admin, getAllUsers);
 router.get('/me', protect, getUserProfile);       // Get current user's profile
 router.put('/me', protect, updateUserProfile);   
+router.delete('/:id', protect, admin, deleteUser);
 module.exports = router;
 
