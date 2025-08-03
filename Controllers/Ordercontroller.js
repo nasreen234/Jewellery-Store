@@ -51,4 +51,17 @@ const Order = require('../models/Ordermodel.js');
     res.status(404).json({ message: 'Order not found' });
   }
 };
- module.exports ={ createOrder,getMyOrders,getAllOrders,updateOrderStatus }
+
+const deleteOrder = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    await order.remove();
+    res.json({ message: 'Order deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting order' });
+  }
+};
+
+ module.exports ={ createOrder,getMyOrders,getAllOrders,updateOrderStatus,deleteOrder }
