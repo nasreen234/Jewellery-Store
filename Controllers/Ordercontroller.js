@@ -53,17 +53,21 @@ const Order = require('../models/Ordermodel.js');
 };
 
 const deleteOrder = async (req, res) => {
-   console.log('➡️ DELETE /api/orders/:id hit');
   try {
     const order = await Order.findById(req.params.id);
-    if (!order) return res.status(404).json({ message: 'Order not found' });
 
-    await order.remove();
-    res.json({ message: 'Order deleted successfully' });
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    await Order.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({ message: "Order deleted successfully" });
   } catch (error) {
-    console.error('❌ Delete Order Error:', error); 
-    res.status(500).json({ message: 'Error deleting order' });
+    console.error("Error deleting order:", error.message);
+    res.status(500).json({ message: error.message || "Server error" });
   }
 };
+
 
  module.exports ={ createOrder,getMyOrders,getAllOrders,updateOrderStatus,deleteOrder }
