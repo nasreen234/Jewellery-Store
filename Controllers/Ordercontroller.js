@@ -2,7 +2,7 @@ const Order = require('../models/Ordermodel.js');
 
  const createOrder = async (req, res) => {
   try {
-     console.log('REQ USER:', req.user); // 👈 debug this
+     console.log('REQ USER:', req.user); 
     console.log('BODY:', req.body);
  console.log('Received shippingAddress:', req.body.shippingAddress);
     const { orderItems, shippingAddress, totalPrice, paymentMethod } = req.body;

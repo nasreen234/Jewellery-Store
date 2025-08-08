@@ -52,7 +52,7 @@ const getAllUsers = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
-// @desc    Get current user profile
+// Get current user profile
 const getUserProfile = async (req, res) => {
   const user = await User.findById(req.user.id).select('-password');
   if (!user) return res.status(404).json({ message: 'User not found' });
@@ -98,7 +98,7 @@ const getUserProfile = async (req, res) => {
     }
   };
 
-// @desc    Delete a user by ID (Admin only)
+// Delete a user by ID (Admin only)
 const deleteUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);

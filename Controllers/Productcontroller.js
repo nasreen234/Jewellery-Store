@@ -1,7 +1,7 @@
 const Product = require('../models/Productmodel.js');
 const cloudinary = require('cloudinary').v2;
 
-// ✅ Get all products
+//  Get all products
 const getProducts = async (req, res) => {
   try {
     
@@ -12,7 +12,7 @@ const getProducts = async (req, res) => {
   }
 };
 
-// ✅ Get a single product
+// Get a single product
 const getProduct = async (req, res) => {
   try {
     const { id } = req.params;
@@ -24,7 +24,7 @@ const getProduct = async (req, res) => {
   }
 };
 
-// ✅ Create a new product
+//  Create a new product
 const createProduct = async (req, res) => {
   try {
     const { name, price, size, productcode, category,subcategory, description, inStock } = req.body;
@@ -50,7 +50,7 @@ const createProduct = async (req, res) => {
   }
 };
 
-// ✅ Update a product with optional image replacement
+// Update a product with optional image replacement
     const updateProduct = async (req, res) => {
       try {
         const { id } = req.params;
@@ -89,7 +89,7 @@ const createProduct = async (req, res) => {
       }
     };
 
-// ✅ Delete a product and its image
+// Delete a product and its image
 const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
@@ -109,7 +109,7 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-// ✅ Export all
+//  Export all
 module.exports = {
   getProducts,
   getProduct,

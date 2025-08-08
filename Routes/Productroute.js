@@ -12,11 +12,11 @@ const { protect, admin } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// ✅ Public routes
+// Public routes
 router.get('/', getProducts);
 router.get("/:id", getProduct);
 
-// ✅ Admin-protected routes
+// Admin-protected routes
 router.post("/", protect, admin, upload.single("image"), createProduct);
 router.put('/:id', protect, admin, upload.single("image"), updateProduct);
 router.patch('/:id', protect, admin, upload.single("image"), updateProduct);

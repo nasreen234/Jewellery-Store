@@ -7,7 +7,7 @@ const { protect, admin } = require('../middleware/authMiddleware');
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.get('/', protect, admin, getAllUsers);
-router.get('/me', protect, getUserProfile);       // Get current user's profile
+router.get('/me', protect, getUserProfile);       
 router.put('/me', protect, updateUserProfile);   
 router.delete('/:id', protect, admin, deleteUser);
 module.exports = router;
